@@ -11,6 +11,14 @@ import javax.persistence.Id;
 @Data
 @NoArgsConstructor
 @Entity
+/**
+ * StockExchange : is the aggregation of buyers and sellers of stocks
+ *
+ * Example : name -> National Association of Securities Dealers Automated Quotations
+ *           shortName -> NASDAQ
+ *           region -> United States
+ *           marketPlace -> New York
+ */
 public class StockExchange {
 
     @Id

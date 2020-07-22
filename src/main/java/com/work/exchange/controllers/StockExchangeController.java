@@ -15,11 +15,20 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 @AllArgsConstructor
+/**
+ * REST Controller of Stock Exchange
+ *
+ */
 public class StockExchangeController {
 
     private final StockExchangeRepository stockExchangeRepository;
 
     @GetMapping("/stockExchanges")
+    /**
+     * Get all stock exchanges
+     *
+     * @return list of all stock exchanges
+     */
     public List<StockExchange> getAllStockExchanges() {
         final List<StockExchange> result = (List<StockExchange>) stockExchangeRepository.findAll();
 
@@ -31,12 +40,25 @@ public class StockExchangeController {
     }
 
     @PostMapping("/stockExchanges")
+    /**
+     * Add stock exchange
+     *
+     * @param stockExchange to add
+     * @return void
+     */
     public void addStockExchange(@RequestBody final StockExchange stockExchange) {
         log.info("Request to add stock exchange : {}", stockExchange);
         stockExchangeRepository.save(stockExchange);
     }
 
     @GetMapping("/stockExchanges/{id}")
+    /**
+     * Get stock exchange by id
+     *
+     * @param id
+     * @exception StockExchangeNotFoundException if id does not exist
+     * @return StockExchange corresponding to the id
+     */
     public StockExchange getStockExchange(@PathVariable final String id) {
         final StockExchange stockExchange = stockExchangeRepository
                 .findById(Long.parseLong(id))
@@ -47,6 +69,13 @@ public class StockExchangeController {
         return stockExchange;
     }
 
+    /**
+     * Edit stock exchange
+     *
+     * @param stockExchange represent the new element
+     * @exception StockExchangeNotFoundException if stockExchange id does not exist into database
+     * @return edited stock exchange
+     */
     @PutMapping("/stockExchanges")
     public StockExchange editStockExchange(@RequestBody final StockExchange stockExchange) {
         final StockExchange stockExchangeToEdit = stockExchangeRepository
@@ -60,6 +89,13 @@ public class StockExchangeController {
     }
 
     @DeleteMapping("/stockExchanges/{id}")
+    /**
+     * Remove stock exchange by id
+     *
+     * @param id
+     * @exception StockExchangeNotFoundException stockExchange id does not exist into databases
+     * @return Http 204 if success
+     */
     public ResponseEntity deleteStockExchange(@PathVariable final String id) {
         final StockExchange stockExchange = stockExchangeRepository
                 .findById(Long.parseLong(id))
