@@ -4,12 +4,14 @@ import com.work.exchange.exceptions.StockExchangeNotFoundException;
 import com.work.exchange.models.StockExchange;
 import com.work.exchange.repository.StockExchangeRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 @AllArgsConstructor
@@ -24,11 +26,13 @@ public class StockExchangeController {
         if (result.isEmpty()) {
             throw new StockExchangeNotFoundException("No stock exchange were found");
         }
+        log.info("Found {} stock exchanges", result.size());
         return result;
     }
 
     @PostMapping("/stockExchanges")
     public void addStockExchange(@RequestBody final StockExchange stockExchange) {
+        log.info("Request to add stock exchange : {}", stockExchange);
         stockExchangeRepository.save(stockExchange);
     }
 
@@ -39,7 +43,7 @@ public class StockExchangeController {
                         .orElseThrow(() ->
                                 new StockExchangeNotFoundException("The stock exchange with id = " + id + " does not exist")
                         );
-
+        log.info("Found stock exchange with id : {} and value : {}", id, stockExchange);
         return stockExchange;
     }
 
@@ -50,14 +54,20 @@ public class StockExchangeController {
                 .orElseThrow(() ->
                         new StockExchangeNotFoundException("The stock exchange with id = " + stockExchange.getId() + " does not exist")
                 );
-
+        log.info("Value of old stock exchange equals : {} and new stock exchange equals : {}", stockExchangeToEdit, stockExchange);
         stockExchangeRepository.save(stockExchange);
         return stockExchange;
     }
 
     @DeleteMapping("/stockExchanges/{id}")
     public ResponseEntity deleteStockExchange(@PathVariable final String id) {
+        final StockExchange stockExchange = stockExchangeRepository
+                .findById(Long.parseLong(id))
+                .orElseThrow(() ->
+                        new StockExchangeNotFoundException("The stock exchange with id = " + id + " does not exist")
+                );
         stockExchangeRepository.deleteById(Long.parseLong(id));
+        log.info("delete stock exchange with id : {}", id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }
