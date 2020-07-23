@@ -1,0 +1,19 @@
+<div class="card my-5">
+  <div class="card-body">
+    <form (ngSubmit)="onSubmit()" #deleteExchangesFormByID="ngForm">
+      <div class="form-group">
+        <label for="id">Id</label>
+        <input type="text" [(ngModel)]="stockExchange.id"
+               class="form-control"
+               id="id"
+               name="id"
+               placeholder="Enter Id"
+               required #id="ngModel">
+      </div>
+      <div [hidden]="!id.pristine" class="alert alert-danger">Id is required</div>
+
+      <button type="submit" [disabled]="!deleteExchangesFormByID.form.valid"
+              class="btn btn-info">Submit</button>
+    </form>
+  </div>
+</div>
